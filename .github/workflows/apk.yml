@@ -24,6 +24,18 @@ jobs:
           npx cap init "Xarajat nazorati" uz.xarajat.nazorati --web-dir www
           npx cap add android
           npx cap sync android
+      - name: Fix duplicate Kotlin classes
+        run: |
+          cat >> android/app/build.gradle <<'EOF'
+
+          configurations.all {
+              resolutionStrategy {
+                  force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+                  force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22'
+                  force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+              }
+          }
+          EOF
       - name: Build debug APK
         run: cd android && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
