@@ -17,13 +17,19 @@ jobs:
         run: |
           mkdir www
           cp index.html www/index.html
+      - name: Prepare icon
+        run: |
+          mkdir assets
+          cp icon-only.png assets/icon-only.png
       - name: Create Android project
         run: |
           npm init -y
-          npm i @capacitor/core @capacitor/cli @capacitor/android
+          npm i @capacitor/core @capacitor/cli @capacitor/android @capacitor/app
           npx cap init "Xarajat nazorati" uz.xarajat.nazorati --web-dir www
           npx cap add android
           npx cap sync android
+      - name: Generate app icons
+        run: npx @capacitor/assets generate --android --iconBackgroundColor '#0a0d26' --iconBackgroundColorDark '#0a0d26'
       - name: Fix duplicate Kotlin classes
         run: |
           cat >> android/app/build.gradle <<'EOF'
